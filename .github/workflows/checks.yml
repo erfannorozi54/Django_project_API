@@ -1,4 +1,3 @@
-git ---
 name: Check
 
 on: [push]
