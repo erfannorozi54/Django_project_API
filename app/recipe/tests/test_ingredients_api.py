@@ -49,8 +49,8 @@ class PrivateIngredientsAPITest(TestCase):
     def test_retrieve_ingredients(self):
         """Test retrieving a list of ingredients."""
 
-        Ingredient.objects.create(user=self.user, name ='Kale')
-        Ingredient.objects.create(user=self.user, name = 'Vanilla')
+        Ingredient.objects.create(user=self.user, name='Kale')
+        Ingredient.objects.create(user=self.user, name='Vanilla')
 
         res = self.client.get(INGREDIENTS_URL)
 
@@ -58,11 +58,11 @@ class PrivateIngredientsAPITest(TestCase):
         serializer = IngredientSerializer(ingredients, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
-    
+
     def test_ingredients_limited_to_user(self):
         """Test list of ingredients is limited to authenticated user."""
         user2 = create_user(email='user2@excample.com')
-        Ingredient.objects.create(user=user2, name ='Salt')
+        Ingredient.objects.create(user=user2, name='Salt')
         ingredient = Ingredient.objects.create(user=self.user, name='Pepper')
 
         res = self.client.get(INGREDIENTS_URL)
