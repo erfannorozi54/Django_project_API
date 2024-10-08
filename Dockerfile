@@ -13,9 +13,9 @@ ARG DEV=false
 RUN mkdir /.virtualenvs && \
     python -m venv /.virtualenvs/dev && \
     /.virtualenvs/dev/bin/python -m pip install --upgrade pip && \
-    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
-    build-base postgresql-dev musl-dev && \
+    build-base postgresql-dev musl-dev zlib zlib-dev && \
     /.virtualenvs/dev/bin/python -m pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
     then /.virtualenvs/dev/bin/python -m pip install -r /tmp/requirements.dev.txt ;\
@@ -25,8 +25,13 @@ RUN mkdir /.virtualenvs && \
     adduser \
     --disabled-password \
     --no-create-home \
-    django-user
+    django-user && \
+    mkdir -p /vol/web/media && \ 
+    mkdir -p /vol/web/static && \
+    chown -R django-user:django-user /vol && \
+    chmod -R 755 /vol
 
 
 ENV PATH="/.virtualenvs/dev/bin:$PATH"
 
+USER django-user
